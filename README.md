@@ -21,6 +21,8 @@ Ensure that these are installed so the CLI tool can be used.
 - `--json` or `-j`: Outputs the Merkle tree data as a JSON file instead of printing it to the console.
 - `--output <filename>`: Specifies the output filename for the JSON data. If not provided, it defaults to `merkle.json`.
 
+![Demo usuage](https://neiman.co.il/mpz.gif)
+
 ### Example Commands
 
 To run the program, use the following command in your terminal:
