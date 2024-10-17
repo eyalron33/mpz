@@ -2,6 +2,8 @@
 
 This CLI tool generates Merkle trees using the Pedersen hash based on the Aztec implementation. The hashing process is executed through a Noir program, utilizing the `nargo` tool to calculate the hash and retrieve the output.
 
+Read the [Release post](https://neimanslab.org/2024-10-17/merkle_pedersen_aztec.html).
+
 ## Features
 
 - Generates Merkle trees from user interactive input (decimal or hex input)
