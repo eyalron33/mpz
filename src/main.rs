@@ -42,7 +42,8 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
 
     // Logic to gather inputs...
     loop {
-        let input = inquire::Text::new("Enter an Fq element (or press Enter to stop):").prompt()?;
+        let input = inquire::Text::new("Enter a decimal or hex number (or press Enter to stop):")
+            .prompt()?;
         if input.trim().is_empty() {
             break;
         }
