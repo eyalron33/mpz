@@ -1,4 +1,10 @@
-use clap::Parser;
+use clap::{Parser, ValueEnum};
+
+#[derive(ValueEnum, Clone, Debug)]
+pub enum OutputFormat {
+    Hex,
+    Dec,
+}
 
 #[derive(Parser, Debug)]
 #[command(name = "mpz")]
@@ -15,4 +21,8 @@ pub struct Cli {
     /// If not provided, it uses the default from `consts.rs`.
     #[arg(short = 'o', long = "output", requires = "json")]
     pub output: Option<String>,
+
+    /// Output format: hex or dec (default: hex)
+    #[arg(short = 'f', long = "format", value_enum, default_value = "hex")]
+    pub format: OutputFormat,
 }

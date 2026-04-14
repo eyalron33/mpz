@@ -3,7 +3,7 @@
 // The hash we it uses is Pedersen hash as implemented by Aztec.
 
 use crate::cli::Cli;
-use crate::hashing::{fq_to_str_hex, get_fq_element};
+use crate::hashing::{fq_to_str_dec, fq_to_str_hex, get_fq_element};
 
 use clap::Parser;
 use inquire;
@@ -22,9 +22,9 @@ pub(crate) type Error = Box<dyn std::error::Error>;
 // Struct to represent a Merkle member (input with index and proof path)
 #[derive(Serialize, Deserialize)]
 struct MerkleMember {
-    leaf: String, // Fq element in hex
+    leaf: String, // Fq element
     index: usize,
-    path: Vec<String>, // Merkle proof path in hex
+    path: Vec<String>, // Merkle proof path
 }
 
 fn main() {
@@ -36,6 +36,11 @@ fn main() {
 
 fn run() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
+
+    let format_fq = |fq: &_| match cli.format {
+        cli::OutputFormat::Hex => fq_to_str_hex(fq),
+        cli::OutputFormat::Dec => fq_to_str_dec(fq),
+    };
 
     // Collect inputs from the user
     let mut inputs = Vec::new();
@@ -69,9 +74,9 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
                     .enumerate()
                     .map(|(i, leaf)| {
                         let path: Vec<String> =
-                            proof_paths[i].iter().map(|fq| fq_to_str_hex(fq)).collect();
+                            proof_paths[i].iter().map(|fq| format_fq(fq)).collect();
                         MerkleMember {
-                            leaf: fq_to_str_hex(leaf),
+                            leaf: format_fq(leaf),
                             index: indices[i] as usize,
                             path,
                         }
@@ -79,7 +84,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
                     .collect();
 
                 let tree_json = serde_json::json!({
-                    "root": fq_to_str_hex(&root_hash),
+                    "root": format_fq(&root_hash),
                     "leaves": members
                 });
 
@@ -92,10 +97,10 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
                 println!("Merkle tree data saved to {}", output_filename);
             } else {
                 // Output to console
-                println!("Merkle tree root hash: {:?}", fq_to_str_hex(&root_hash));
+                println!("Merkle tree root hash: {:?}", format_fq(&root_hash));
                 for (i, path) in proof_paths.iter().enumerate() {
-                    let hex_path: Vec<String> = path.iter().map(|fq| fq_to_str_hex(fq)).collect();
-                    println!("Leaf {}: Proof path: {:?}", i, hex_path);
+                    let proof_path: Vec<String> = path.iter().map(|fq| format_fq(fq)).collect();
+                    println!("Leaf {}: Proof path: {:?}", i, proof_path);
                 }
                 println!("Indices: {:?}", indices);
             }

@@ -105,3 +105,14 @@ pub fn fq_to_str_hex(fq: &Fq) -> String {
     // Return the hex string formatted with leading zeros
     format!("{:0>64x}", fq_decimal)
 }
+
+pub fn fq_to_str_dec(fq: &Fq) -> String {
+    // convert to a decimal string
+    let fq_string = fq.to_string();
+
+    // Parse the decimal string into a hex
+    let fq_decimal = BigUint::parse_bytes(fq_string.as_bytes(), 10).unwrap();
+
+    // return the hex string
+    fq_decimal.to_string()
+}
